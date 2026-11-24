@@ -1,0 +1,28 @@
+name: Build and Release Plugin
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Package Plugin Archive
+        run: |
+          mkdir -p dist
+          zip -r "dist/seo.zip" . -x ".git/*" -x ".github/*" -x "dist/*" -x "*.zip"
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: dist/seo.zip
+          generate_release_notes: true
