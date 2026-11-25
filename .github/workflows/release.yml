@@ -18,8 +18,11 @@ jobs:
 
       - name: Package Plugin Archive
         run: |
+          mkdir -p /tmp/pkg/seo
+          cp -r . /tmp/pkg/seo/
+          rm -rf /tmp/pkg/seo/.git /tmp/pkg/seo/.github /tmp/pkg/seo/dist
           mkdir -p dist
-          zip -r "dist/seo.zip" . -x ".git/*" -x ".github/*" -x "dist/*" -x "*.zip"
+          (cd /tmp/pkg && zip -r "$GITHUB_WORKSPACE/dist/seo.zip" seo)
 
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v1
